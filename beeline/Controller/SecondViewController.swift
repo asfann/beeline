@@ -6,17 +6,73 @@
 //
 
 import UIKit
+import Cosmos
 
-class SecondViewController: UIViewController {
+class SecondViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+  
+    
     private let data: Product
     
-    
     var productLabel = UILabel()
+    
+    var collection: UICollectionView!
 
-    private let tableView: UITableView = {
-        let table = UITableView()
-        return table
+    
+   private var titleLabel: UILabel = {
+       let title = UILabel()
+       title.font = .boldSystemFont(ofSize: 25)
+        return title
     }()
+    
+    private var priceLabel: UILabel = {
+        let price = UILabel()
+        price.font = .systemFont(ofSize: 25)
+        let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: "\(price)")
+            attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
+        price.attributedText = attributeString
+         return price
+     }()
+     
+    private var discountLabel: UILabel = {
+        let discount = UILabel()
+        discount.font = .boldSystemFont(ofSize: 25)
+         return discount
+     }()
+    
+    private var categoryLabel: UILabel = {
+        let category = UILabel()
+        category.font = .boldSystemFont(ofSize: 25)
+        category.textColor = .lightGray
+         return category
+     }()
+    private var brandLabel: UILabel = {
+         let brand = UILabel()
+        brand.font = .boldSystemFont(ofSize: 25)
+        brand.textColor = .lightGray
+          return brand
+      }()
+    private var descriptionLabel: UILabel = {
+        let description = UILabel()
+        description.numberOfLines = 0
+         return description
+     }()
+     
+    
+    private var ratingView: CosmosView = {
+            let view = CosmosView()
+            view.settings.starSize = 30
+            view.settings.updateOnTouch = false
+            view.settings.fillMode = .precise
+            return view
+        }()
+    
+    var newPrice: Double {
+        let newPrice = Double(data.price) - (Double(data.price) * data.discountPercentage/100.0)
+        let numberOfPlaces = 2.0
+        let multiplier = pow(10.0, numberOfPlaces)
+        let rounded = round(newPrice * multiplier) / multiplier
+        return rounded
+    }
     
     
     init(data: Product) {
@@ -30,68 +86,135 @@ class SecondViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = data.brand
+        title = data.title
         view.backgroundColor = .white
-        
-        var lineView = UIView(frame: CGRect(x: 0, y: 100, width: 490, height: 1.0))
-        lineView.layer.borderWidth = 1.0
-        lineView.center = CGPoint(x: 160, y: 230)
-        lineView.layer.borderColor = UIColor.lightGray.cgColor
-        self.view.addSubview(lineView)
-        
-        let title = UILabel(frame: CGRect(x: 0, y: 0, width: 250, height: 21))
-        title.center = CGPoint(x: 160, y: 285)
-        title.textAlignment = .left
-        title.text = data.title
-        view.addSubview(title)
-        
-        
-        let rating = UILabel(frame: CGRect(x: 0, y: 0, width: 250, height: 21))
-        rating.center = CGPoint(x: 160, y: 320)
-        rating.textAlignment = .left
-        rating.text = "\(data.rating) ⭐️"
-        view.addSubview(rating)
-        
-        
-        let price = UILabel(frame: CGRect(x: 0, y: 0, width: 250, height: 21))
-        price.center = CGPoint(x: 160, y: 380)
-        price.textAlignment = .left
-        price.text = "\(data.price) $"
-        view.addSubview(price)
-        
-        var lineView1 = UIView(frame: CGRect(x: 0, y: 100, width: 490, height: 1.0))
-        lineView1.layer.borderWidth = 1.0
-        lineView1.center = CGPoint(x: 160, y: 350)
-        lineView1.layer.borderColor = UIColor.lightGray.cgColor
-        self.view.addSubview(lineView1)
-        
-//        let category = UILabel(frame: CGRect(x: 0, y: 0, width: 250, height: 21))
-//        category.center = CGPoint(x: 160, y: 250)
-//        category.textAlignment = .left
-//        category.text = data.category
-//        view.addSubview(category)
-//
-        
-        let discount = UILabel(frame: CGRect(x: 0, y: 0, width: 250, height: 21))
-        discount.center = CGPoint(x: 240, y: 370)
-        discount.textAlignment = .right
-        discount.text = "discount \(data.discountPercentage) %"
-        view.addSubview(discount)
-        
-        
-        let stock = UILabel(frame: CGRect(x: 0, y: 0, width: 250, height: 21))
-        stock.center = CGPoint(x: 270, y: 390)
-        stock.textAlignment = .center
-        stock.text = "stock: \(data.stock)"
-        view.addSubview(stock)
+        titleLabel.text = data.title
+        discountLabel.text = "\(newPrice) $"
+        priceLabel.text = "\(data.price) $"
+        ratingView.rating = data.rating
+        descriptionLabel.text = data.productDescription
+        categoryLabel.text = "category: \(data.category)"
+        brandLabel.text = "Brand: \(data.brand)"
+        setupUI()
+        setTitleContraints()
+        setDiscountContraints()
+        setPriceContraints()
+        setRatingContraints()
+        setCategoryContraints()
+        setBrandContraints()
+        setDescriprionContraints()
     }
     
     
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
+     func setupUI() {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+         
+         view.addSubview(collection)
+        
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0 ).isActive = true
+        collection.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        collection.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        collection.heightAnchor.constraint(equalToConstant: 400).isActive = true
+        
+        collection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collection.dataSource = self
+        collection.delegate = self
     }
+    
+    
+    func setTitleContraints() {
+        view.addSubview(titleLabel)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.topAnchor.constraint(equalTo: collection.bottomAnchor).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        
+        titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12).isActive = true
+    }
+    
+    func setDiscountContraints() {
+        view.addSubview(discountLabel)
+        discountLabel.translatesAutoresizingMaskIntoConstraints = false
+        discountLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
+        discountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        
+        discountLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+
+    }
+    
+    func setPriceContraints() {
+        view.addSubview(priceLabel)
+        priceLabel.translatesAutoresizingMaskIntoConstraints = false
+        priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
+        priceLabel.leadingAnchor.constraint(equalTo: discountLabel.trailingAnchor, constant: 20).isActive = true
+        
+        priceLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+
+    }
+    func setRatingContraints() {
+        view.addSubview(ratingView)
+        ratingView.translatesAutoresizingMaskIntoConstraints = false
+        ratingView.topAnchor.constraint(equalTo: discountLabel.bottomAnchor).isActive = true
+        ratingView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        ratingView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12).isActive = true
+        
+        ratingView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    }
+    func setDescriprionContraints() {
+        view.addSubview(descriptionLabel)
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.topAnchor.constraint(equalTo: brandLabel.bottomAnchor).isActive = true
+        descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12).isActive = true
+        
+    }
+    func setCategoryContraints() {
+        view.addSubview(categoryLabel)
+        categoryLabel.translatesAutoresizingMaskIntoConstraints = false
+        categoryLabel.topAnchor.constraint(equalTo: ratingView.bottomAnchor).isActive = true
+        categoryLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        categoryLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12).isActive = true
+        
+        categoryLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    }
+    func setBrandContraints() {
+        view.addSubview(brandLabel)
+        brandLabel.translatesAutoresizingMaskIntoConstraints = false
+        brandLabel.topAnchor.constraint(equalTo: categoryLabel.bottomAnchor).isActive = true
+        brandLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        brandLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12).isActive = true
+        brandLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return data.images.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+        
+        guard let url = URL(string: data.images[indexPath.row]) else {fatalError()}
+        let imageView = UIImageView()
+        imageView.sd_setImage(with: url)
+        cell.addSubview(imageView)
+        cell.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.topAnchor.constraint(equalTo: cell.topAnchor, constant: 8 ).isActive = true
+        imageView.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
+        imageView.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
+        imageView.bottomAnchor.constraint(equalTo: cell.bottomAnchor, constant: 0).isActive = true
+        return cell
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width * 0.75, height: 400)
+    }
+    
     
   
 }

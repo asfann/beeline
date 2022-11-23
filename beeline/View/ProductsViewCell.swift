@@ -15,6 +15,7 @@ class ProductsViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         addSubview(productImageView)
         addSubview(productLabel)
         configureImageView()
@@ -22,7 +23,6 @@ class ProductsViewCell: UITableViewCell {
         setImageContraints()
         setLabelContraints()
     }
-    
     
     
     required init?(coder: NSCoder) {
@@ -44,7 +44,7 @@ class ProductsViewCell: UITableViewCell {
         productLabel.numberOfLines = 0
         productLabel.adjustsFontSizeToFitWidth = true
     }
-    
+   
     
     
     func setImageContraints() {

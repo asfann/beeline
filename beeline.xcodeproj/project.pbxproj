@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		560AEFD0291D306100D70FF2 /* ImageSlideshow in Frameworks */ = {isa = PBXBuildFile; productRef = 560AEFCF291D306100D70FF2 /* ImageSlideshow */; };
-		560AEFD2291D306100D70FF2 /* ImageSlideshow/SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 560AEFD1291D306100D70FF2 /* ImageSlideshow/SDWebImage */; };
+		560AEFD7291E593F00D70FF2 /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = 560AEFD6291E593F00D70FF2 /* Cosmos */; };
 		56C8233B291A6A7600F713F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C8233A291A6A7600F713F0 /* AppDelegate.swift */; };
 		56C8233D291A6A7600F713F0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C8233C291A6A7600F713F0 /* SceneDelegate.swift */; };
 		56C8233F291A6A7600F713F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C8233E291A6A7600F713F0 /* ViewController.swift */; };
@@ -42,15 +41,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				560AEFD2291D306100D70FF2 /* ImageSlideshow/SDWebImage in Frameworks */,
+				560AEFD7291E593F00D70FF2 /* Cosmos in Frameworks */,
 				56C8235B291B112500F713F0 /* SDWebImage in Frameworks */,
-				560AEFD0291D306100D70FF2 /* ImageSlideshow in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		560AEFD3291E56D000D70FF2 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				56C82352291AEF9F00F713F0 /* ExtensionPin.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		56C8232E291A6A7600F713F0 = {
 			isa = PBXGroup;
 			children = (
@@ -73,7 +79,6 @@
 				56C8233A291A6A7600F713F0 /* AppDelegate.swift */,
 				56C8233C291A6A7600F713F0 /* SceneDelegate.swift */,
 				56C82345291A6A7700F713F0 /* LaunchScreen.storyboard */,
-				56C82352291AEF9F00F713F0 /* ExtensionPin.swift */,
 				56C82350291AED9B00F713F0 /* Model */,
 				56C8235D291B9E9B00F713F0 /* View */,
 				56C8235E291B9EAA00F713F0 /* Manager */,
@@ -104,6 +109,7 @@
 		56C8235D291B9E9B00F713F0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				560AEFD3291E56D000D70FF2 /* Extension */,
 				56C82354291AF0CA00F713F0 /* ProductsViewCell.swift */,
 			);
 			path = View;
@@ -135,8 +141,7 @@
 			name = beeline;
 			packageProductDependencies = (
 				56C8235A291B112500F713F0 /* SDWebImage */,
-				560AEFCF291D306100D70FF2 /* ImageSlideshow */,
-				560AEFD1291D306100D70FF2 /* ImageSlideshow/SDWebImage */,
+				560AEFD6291E593F00D70FF2 /* Cosmos */,
 			);
 			productName = beeline;
 			productReference = 56C82337291A6A7600F713F0 /* beeline.app */;
@@ -168,7 +173,7 @@
 			mainGroup = 56C8232E291A6A7600F713F0;
 			packageReferences = (
 				56C82359291B112500F713F0 /* XCRemoteSwiftPackageReference "SDWebImage" */,
-				560AEFCE291D306100D70FF2 /* XCRemoteSwiftPackageReference "ImageSlideshow" */,
+				560AEFD5291E593F00D70FF2 /* XCRemoteSwiftPackageReference "Cosmos" */,
 			);
 			productRefGroup = 56C82338291A6A7600F713F0 /* Products */;
 			projectDirPath = "";
@@ -413,12 +418,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		560AEFCE291D306100D70FF2 /* XCRemoteSwiftPackageReference "ImageSlideshow" */ = {
+		560AEFD5291E593F00D70FF2 /* XCRemoteSwiftPackageReference "Cosmos" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/zvonicek/ImageSlideshow";
+			repositoryURL = "https://github.com/evgenyneu/Cosmos";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				branch = master;
+				kind = branch;
 			};
 		};
 		56C82359291B112500F713F0 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
@@ -432,15 +437,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		560AEFCF291D306100D70FF2 /* ImageSlideshow */ = {
+		560AEFD6291E593F00D70FF2 /* Cosmos */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 560AEFCE291D306100D70FF2 /* XCRemoteSwiftPackageReference "ImageSlideshow" */;
-			productName = ImageSlideshow;
-		};
-		560AEFD1291D306100D70FF2 /* ImageSlideshow/SDWebImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 560AEFCE291D306100D70FF2 /* XCRemoteSwiftPackageReference "ImageSlideshow" */;
-			productName = ImageSlideshow/SDWebImage;
+			package = 560AEFD5291E593F00D70FF2 /* XCRemoteSwiftPackageReference "Cosmos" */;
+			productName = Cosmos;
 		};
 		56C8235A291B112500F713F0 /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;

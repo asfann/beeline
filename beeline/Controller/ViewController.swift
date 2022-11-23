@@ -16,13 +16,18 @@ class ViewController: UIViewController{
         title = "Beeline Shop"
         configureTableView()
         getProduct()
+        view.frame = view.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         
     }
     
     func configureTableView() {
         view.addSubview(tableview)
+        
         setTableViewDelegates()
         tableview.rowHeight = 100
+        tableview.layer.borderWidth = 1
+        tableview.layer.cornerRadius = 4
+        tableview.separatorStyle = .none
         tableview.pin(to: view)
         tableview.register(ProductsViewCell.self, forCellReuseIdentifier: "productCell")
     }
@@ -57,10 +62,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         let cell = tableview.dequeueReusableCell(withIdentifier: "productCell") as! ProductsViewCell
         let products = product[indexPath.row]
         cell.set(product: products)
+        cell.layer.masksToBounds = true
         return cell
     }
     
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         let data = product[indexPath.row]
         let detail = SecondViewController(data: data)
         navigationController?.pushViewController(detail, animated: true)
